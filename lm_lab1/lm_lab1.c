@@ -30,6 +30,8 @@ int main(int argc, char const *argv[])
     };
     int aktualny_stan = 0;
     int wrzucona_moneta = 0;
+    int iterator = 0;
+    int tablica_wykonanych_przejsc[25]= {};
     printf("Wrzuc monete (1, 2, 5):  ");
     while (aktualny_stan != 20 && aktualny_stan != 21 && aktualny_stan != 22 && aktualny_stan != 23 && aktualny_stan != 24 )
     {
@@ -37,14 +39,18 @@ int main(int argc, char const *argv[])
         // funkcja przejscia
         if (wrzucona_moneta == 1)
         {
+            tablica_wykonanych_przejsc[iterator++]=aktualny_stan;
             aktualny_stan = tablica_przejsc[aktualny_stan][0];
+
         }
         else if (wrzucona_moneta==2)
         {
+            tablica_wykonanych_przejsc[iterator++]=aktualny_stan;
             aktualny_stan = tablica_przejsc[aktualny_stan][1];
         }
         else if (wrzucona_moneta==5)
         {
+            tablica_wykonanych_przejsc[iterator++]=aktualny_stan;
             aktualny_stan = tablica_przejsc[aktualny_stan][2];
         }
         else
@@ -57,24 +63,36 @@ int main(int argc, char const *argv[])
     }
     if (aktualny_stan==20)
     {
-        printf("wydaje bilet i %dzl reszty", 0);
+        tablica_wykonanych_przejsc[iterator++]=aktualny_stan;
+        printf("wydaje bilet i %dzl reszty\n", 0);
     }
     else if (aktualny_stan==21)
     {
-        printf("wydaje bilet i %dzl reszty", 1);
+        tablica_wykonanych_przejsc[iterator++]=aktualny_stan;
+        printf("wydaje bilet i %dzl reszty\n", 1);
     }
     else if (aktualny_stan==22)
     {
-        printf("wydaje bilet i %dzl reszty", 2);
+        tablica_wykonanych_przejsc[iterator++]=aktualny_stan;
+        printf("wydaje bilet i %dzl reszty\n", 2);
     }else if (aktualny_stan==23)
     {
-        printf("wydaje bilet i %dzl reszty", 3);
+        tablica_wykonanych_przejsc[iterator++]=aktualny_stan;
+        printf("wydaje bilet i %dzl reszty\n", 3);
     }else if (aktualny_stan==24)
     {
-        printf("wydaje bilet i %dzl reszty", 4);
+        tablica_wykonanych_przejsc[iterator++]=aktualny_stan;
+        printf("wydaje bilet i %dzl reszty\n", 4);
     }
     else{
-        printf("automat zakonczyl w blednym stanie");
+        printf("automat zakonczyl w blednym stanie\n");
+        return 1;
     }
+    for (int i = 0; i<iterator-1; i++)
+    {
+        printf("q%d -> ", tablica_wykonanych_przejsc[i]);
+    }
+    printf("q%d\n", tablica_wykonanych_przejsc[iterator-1]);
+    
     return 0;
 }
