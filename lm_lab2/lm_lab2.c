@@ -22,6 +22,8 @@ int main(int argc, char const *argv[])
     };
     int aktualny_stan = 0;
     int wrzucona_moneta = 0;
+    int tablica_stanow[100][3]= {};
+
     printf("%d",tablica_przejsc[1][0][1]);
     return 0;
 }
