@@ -24,6 +24,14 @@ int main(int argc, char const *argv[])
     int wrzucona_moneta = 0;
     int tablica_stanow[100][3]= {};
 
-    printf("%d",tablica_przejsc[1][0][1]);
+    FILE *f = fopen("testingnfa.txt","r");
+    if(f == NULL){
+        printf("Blad podczas wczytywania pliku!\n");
+        return -1;
+    }
+    char ch;
+    while((ch = fgetc(f)) != EOF){
+      printf("%c", ch);
+    }
     return 0;
 }
