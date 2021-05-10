@@ -31,37 +31,37 @@ int main(int argc, char const *argv[])
     }
     char ch;
     printf("zaczynamy wczytywanie: \n");
-    printf("0 -> ");
+    printf("q0 -> ");
     while((ch = fgetc(f)) != EOF){
         if(ch == '0'){
             aktualny_stan = tablica_przejsc[aktualny_stan][0][0];
-            printf("%d -> ", aktualny_stan);
+            printf("0 -> q%d -> ", aktualny_stan);
         }
         else if (ch == '1')
         {
             aktualny_stan = tablica_przejsc[aktualny_stan][1][0];
-            printf("%d -> ", aktualny_stan);
+            printf("1 -> q%d -> ", aktualny_stan);
         }
         else if (ch == '2')
         {
             aktualny_stan = tablica_przejsc[aktualny_stan][2][0];
-            printf("%d -> ", aktualny_stan);
+            printf("2 -> q%d -> ", aktualny_stan);
         }else if (ch == '3')
         {
             aktualny_stan = tablica_przejsc[aktualny_stan][3][0];
-            printf("%d -> ", aktualny_stan);
+            printf("3 -> q%d -> ", aktualny_stan);
         }else if (ch == 'a')
         {
             aktualny_stan = tablica_przejsc[aktualny_stan][4][0];
-            printf("%d -> ", aktualny_stan);
+            printf("a -> q%d -> ", aktualny_stan);
         }else if (ch == 'b')
         {
             aktualny_stan = tablica_przejsc[aktualny_stan][5][0];
-            printf("%d -> ", aktualny_stan);
+            printf("b -> q%d -> ", aktualny_stan);
         }else if (ch == 'c')
         {
             aktualny_stan = tablica_przejsc[aktualny_stan][6][0];
-            printf("%d -> ", aktualny_stan);
+            printf("c -> q%d -> ", aktualny_stan);
         }
         else if (ch=='#')
         {
