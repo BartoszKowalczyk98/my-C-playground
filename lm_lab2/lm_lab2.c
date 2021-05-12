@@ -1,4 +1,7 @@
 #include<stdio.h>
+
+
+
 int main(int argc, char const *argv[])
 {
     int tablica_przejsc[17][7][2] = {
@@ -20,54 +23,108 @@ int main(int argc, char const *argv[])
         {{}   ,{}   ,{}   ,{}   ,{}    ,{}    ,{16}},
         {{16} ,{16} ,{16} ,{16} ,{16}  ,{16}  ,{16}}
     };
-    int aktualny_stan = 0;
-    int wrzucona_moneta = 0;
-    int tablica_stanow[100][3]= {};
+    int tablica_stanow[100][100]= {0};
+    int ile_aktywnych_stanow = 0;
 
+    // wczytywanie pliku
+    printf("Podaj nazwę pliku: ");
+    char nazwa_pliku[20];
+    scanf("%s",&nazwa_pliku);
+    
     FILE *f = fopen("testingnfa.txt","r");
     if(f == NULL){
         printf("Blad podczas wczytywania pliku!\n");
         return -1;
     }
     char ch;
-    printf("zaczynamy wczytywanie: \n");
-    printf("q0 -> ");
+
+
+    printf("rozpoczynam wczytywanie z pliku: \n");
     while((ch = fgetc(f)) != EOF){
-        if(ch == '0'){
-            aktualny_stan = tablica_przejsc[aktualny_stan][0][0];
-            printf("0 -> q%d -> ", aktualny_stan);
+        ile_aktywnych_stanow++;
+        for (int i = 0; i < ile_aktywnych_stanow; i++)
+        {
+            // if do rozpoznawania znaku na wejsciu i przejściu do odpowiedniego dla niego stanu 
+            if(ch == '0'){
+                if(tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][0][0]!=0){
+                    tablica_stanow[i][ile_aktywnych_stanow] = tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][0][0];
+                }
+            }
+            else if (ch == '1')
+            {
+                if(tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][1][0]!=0){
+                    tablica_stanow[i][ile_aktywnych_stanow] = tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][1][0];
+                }
+            }
+            else if (ch == '2')
+            {
+               if(tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][2][0]!=0){
+                    tablica_stanow[i][ile_aktywnych_stanow] = tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][2][0];
+                }
+            }
+            else if (ch == '3')
+            {
+                if(tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][3][0]!=0){
+                    tablica_stanow[i][ile_aktywnych_stanow] = tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][3][0];
+                }
+            }
+            else if (ch == 'a')
+            {
+                if(tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][4][0]!=0){
+                    tablica_stanow[i][ile_aktywnych_stanow] = tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][4][0];
+                }
+            }
+            else if (ch == 'b')
+            {
+                if(tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][5][0]!=0){
+                    tablica_stanow[i][ile_aktywnych_stanow] = tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][5][0];
+                }
+            }
+            else if (ch == 'c')
+            {
+                if(tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][6][0]!=0){
+                    tablica_stanow[i][ile_aktywnych_stanow] = tablica_przejsc[tablica_stanow[i][ile_aktywnych_stanow]][6][0];
+                }
+            }
+            else if (ch=='#')
+            {
+                // printowanie tablicy przejsc w ładny sposób
+
+                for (int j = 0; j < ile_aktywnych_stanow; j++)
+                {
+                    
+                    printf("q0");
+                    for (int k = 0; k < ile_aktywnych_stanow; k++)
+                    {
+                        /* code */
+                        if(tablica_stanow[j][k]!=0)
+                        {
+                            printf(" -> q%d",  tablica_stanow[j][k]);
+                        }
+                        
+                    }
+                    printf("\n");
+                    
+                }
+                printf("\n");
+
+                ile_aktywnych_stanow=0;
+                for (int j = 0; j < 100; j++)
+                {
+                    for (int k = 0; k < 100; k++)
+                    {
+                        tablica_stanow[j][k]=0;
+                    }
+                }
+            }
+            else
+            {
+                fclose(f);
+                printf("blad czytania znakow z pliku");
+                return -1;
+            }
         }
-        else if (ch == '1')
-        {
-            aktualny_stan = tablica_przejsc[aktualny_stan][1][0];
-            printf("1 -> q%d -> ", aktualny_stan);
-        }
-        else if (ch == '2')
-        {
-            aktualny_stan = tablica_przejsc[aktualny_stan][2][0];
-            printf("2 -> q%d -> ", aktualny_stan);
-        }else if (ch == '3')
-        {
-            aktualny_stan = tablica_przejsc[aktualny_stan][3][0];
-            printf("3 -> q%d -> ", aktualny_stan);
-        }else if (ch == 'a')
-        {
-            aktualny_stan = tablica_przejsc[aktualny_stan][4][0];
-            printf("a -> q%d -> ", aktualny_stan);
-        }else if (ch == 'b')
-        {
-            aktualny_stan = tablica_przejsc[aktualny_stan][5][0];
-            printf("b -> q%d -> ", aktualny_stan);
-        }else if (ch == 'c')
-        {
-            aktualny_stan = tablica_przejsc[aktualny_stan][6][0];
-            printf("c -> q%d -> ", aktualny_stan);
-        }
-        else if (ch=='#')
-        {
-            printf("stan koncowy dla slowa to %d\n",aktualny_stan);
-            aktualny_stan=0;
-        }
+
         
 
     }
