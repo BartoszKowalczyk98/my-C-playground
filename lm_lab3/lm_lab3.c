@@ -6,61 +6,107 @@
 int main(int argc, char const *argv[])
 {
     char tablica_przejsc[4][3][10] = {
-        {{"-,1,L"},{"-,1,L"},{"-,-,-"}},
-        {{"-,4,-"},{"-,4,-"},{"1,3,-"}},
-        {{"-,-,-"},{"-,-,-"},{"1,3,-"}},
-        {{"-,-,-"},{"-,-,-"},{"-,-,-"}}
+        {{"-,1,L"},{"-,1,L"},{"-,4,-"}},//q0
+        {{"-,4,-"},{"-,4,-"},{"1,3,-"}},//q1
+        {{"-,-,-"},{"-,-,-"},{"1,3,-"}},//q2
+        {{"-,-,-"},{"-,-,-"},{"-,-,-"}} //q4 stan bledu
     };
-    printf("podaj liczbe binarna jednocyfrowa do zwiekszenia o 2: ");
-    char liczba[5];
+    printf("podaj liczbe binarna jednocyfrowa (\"1\" lub \"0\")do zwiekszenia o 2: ");
+    char liczba[2];
     scanf("%s", &liczba);
-    if(strlen(liczba)>2){
+    if(strlen(liczba)>1){
         printf("blad wprowadzonej liczby binarnej liczba nie jest jednocyfrowa!\n");
         return -1;
     }
+    //potrzebne zeby dokleic fragment ze znakiem pustym aby uzytkownik wpisywał tylko jednocyfrową liczbę binarną
+    char tasma[20] = "t";
+    strcat(tasma,liczba);
+
     //skoro zaczynamy analizę od prawej strony to ustawiam index na ostatni znak
-    int indeks_na_ktory_wskazuje_glowica = strlen(liczba)-1;
+    int indeks_na_ktory_wskazuje_glowica = strlen(tasma)-1;
     // rozpoczynamy dzialanie od stanu  q0
     int aktualny_stan=0;
     do
     {
-        printf("indeks glowicy %d ||| aktualny stan  %d ||| caly string %s ||| aktualnie analizowana litera %c |||\n",indeks_na_ktory_wskazuje_glowica,aktualny_stan,liczba,liczba[indeks_na_ktory_wskazuje_glowica]);
+
+        printf("aktualny stan  %d  ||| aktualnie analizowana litera %c |||",aktualny_stan,tasma[indeks_na_ktory_wskazuje_glowica]);
+        if(aktualny_stan==4)
+        {
+            printf("\nautomat znalazl sie w stanie q4 czyli w stanie bledu!\n");
+            return -1;
+        }
+
         // funkcja przejścia
-        if(liczba[indeks_na_ktory_wskazuje_glowica]=='0'){
+        if(tasma[indeks_na_ktory_wskazuje_glowica]=='0'){
             if(tablica_przejsc[aktualny_stan][0][0]!='-'){
-                liczba[indeks_na_ktory_wskazuje_glowica]=tablica_przejsc[aktualny_stan][0][0];
+                tasma[indeks_na_ktory_wskazuje_glowica]=tablica_przejsc[aktualny_stan][0][0];
+                printf(" maszyna wpisuje znak %c |||", tasma[indeks_na_ktory_wskazuje_glowica]);
+            }
+            else
+            {
+                printf(" maszyna nie wpisuje znaku |||");
             }
             if(tablica_przejsc[aktualny_stan][0][4]!='-'){
                 indeks_na_ktory_wskazuje_glowica--;
             }
             if(tablica_przejsc[aktualny_stan][0][2]!='-'){
                 aktualny_stan = (int)tablica_przejsc[aktualny_stan][0][2]-48;
+                printf(" maszyna przechodzi do stanu %d |||", aktualny_stan);
+            }
+            else
+            {
+                printf(" maszyna zostaje w tym samym stanie |||");
             }
         }
-        else if (liczba[indeks_na_ktory_wskazuje_glowica]=='1')
+        else if (tasma[indeks_na_ktory_wskazuje_glowica]=='1')
         {
             if(tablica_przejsc[aktualny_stan][1][0]!='-'){
-                liczba[indeks_na_ktory_wskazuje_glowica]=tablica_przejsc[aktualny_stan][1][0];
+                tasma[indeks_na_ktory_wskazuje_glowica]=tablica_przejsc[aktualny_stan][1][0];
+                printf(" maszyna wpisuje znak %c |||", tasma[indeks_na_ktory_wskazuje_glowica]);
+            }
+            else
+            {
+                printf(" maszyna nie wpisuje znaku |||");
             }
             if(tablica_przejsc[aktualny_stan][1][4]!='-'){
                 indeks_na_ktory_wskazuje_glowica--;
             }
             if(tablica_przejsc[aktualny_stan][1][2]!='-'){
                 aktualny_stan = (int)tablica_przejsc[aktualny_stan][1][2]-48;
+                printf(" maszyna przechodzi do stanu %d |||", aktualny_stan);
             }
+            else
+            {
+                printf(" maszyna zostaje w tym samym stanie |||");
+            }
+            
+            
         }
-        else if(liczba[indeks_na_ktory_wskazuje_glowica]=='t')
+        //t - theta znak pusty 
+        else if(tasma[indeks_na_ktory_wskazuje_glowica]=='t')
         {
+            
             if(tablica_przejsc[aktualny_stan][2][0]!='-'){
-                liczba[indeks_na_ktory_wskazuje_glowica]=tablica_przejsc[aktualny_stan][2][0];
+                tasma[indeks_na_ktory_wskazuje_glowica]=tablica_przejsc[aktualny_stan][2][0];
+                printf(" maszyna wpisuje znak %c |||", tasma[indeks_na_ktory_wskazuje_glowica]);
+            }
+            else
+            {
+                printf(" maszyna nie wpisuje znaku |||");
             }
             if(tablica_przejsc[aktualny_stan][2][4]!='-'){
                 indeks_na_ktory_wskazuje_glowica--;
             }
             if(tablica_przejsc[aktualny_stan][2][2]!='-'){
                 aktualny_stan = (int)tablica_przejsc[aktualny_stan][2][2]-48;
+                printf(" maszyna przechodzi do stanu %d |||", aktualny_stan);
+            }
+            else
+            {
+                printf(" maszyna zostaje w tym samym stanie |||");
             }
         }
+        // jezeli pojawi sie na wejsciu inny znak niz obslugiwany przez maszyne
         else
         {
             if (indeks_na_ktory_wskazuje_glowica == -1)
@@ -68,15 +114,12 @@ int main(int argc, char const *argv[])
                 printf("blad wprowadzonej liczby");
                 return -1;
             }
-            if(aktualny_stan==4)
-            {
-                printf("automat zakończył działanie w stanie błędu ");
-                return -1;
-            }
-            
+            printf("automat napotkal nierozpoznany znak ");
+            return -1;                        
         }
+        printf("\n");
         
     }while(aktualny_stan !=3 );
-    printf("%s\n",liczba);
+    printf("maszyna zakonczyla dzialanie w stanie %d a ciag wyjsciowy to:\n%s\n",aktualny_stan,tasma);
 
 }
