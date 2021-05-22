@@ -3,38 +3,41 @@
 #include <stdlib.h>
 #include <regex.h>
 
-
 int main(int argc, char const *argv[])
 {
-    regex_t regex;
-    int reti;
-    /* Compile regular expression */
-    reti = regcomp(&regex, "^(([0]|[1-9]+)[0-9]*)([/+-/^///*](([0]|[1-9]+)[0-9]*))*([;](([0]|[1-9]+)[0-9]*)([/+-/^///*](([0]|[1-9]+)[0-9]*))*)*$", 0);
-    if (reti) {
-        fprintf(stderr, "Could not compile regex\n");
-        exit(1);
-    }
-    printf("Podaj wyrazenie do sprawdzenia: ");
-    char wyrazenie[300];
-    scanf("%s", &wyrazenie);
-    
-    /* Execute regular expression */
-    reti = regexec(&regex, wyrazenie, 0, NULL, 0);
-    if (!reti) {
-        printf("%s  ",wyrazenie);
-        puts("wyrazenie jest zgodne z gramatyka");
-    }
-    else if (reti == REG_NOMATCH) {
-        printf("%s  ",wyrazenie);
-        puts("wyrazenie nie jest zgodne z gramatyka");
-    }
-    else {
-        regerror(reti, &regex, wyrazenie, sizeof(wyrazenie));
-        fprintf(stderr, "Regex match failed: %s\n", wyrazenie);
-        exit(1);
+    // deklaracja zmiennych potrzebnych do wykonania sprawdzenia z wyrażeniem regularnym
+    regex_t regularneWyrazenie;
+    int zwrotCzyRegularneWyrazenieJestOk;
+    /* kompilacja wyrazenia regularnego w celu sprawdzenia czy jest ono zgodne ze standardami */
+    zwrotCzyRegularneWyrazenieJestOk = regcomp(&regularneWyrazenie, "^((;)?([0]|[1-9]+[0-9]*)([/+-/^///*]([0]|[1-9]+[0-9]*))+)+$", REG_EXTENDED);
+
+    // jeżeli nie udalo sie skompilowac wyrazenia regularnego to zostanie wyrzucony błąd
+    if (zwrotCzyRegularneWyrazenieJestOk) {
+        printf("Nie udalo sie skompilowac wyrazenia regularnego");
+        return -1;
     }
 
-    /* Free memory allocated to the pattern buffer by regcomp() */
-    regfree(&regex);
+    // wprowadzanie zmiennych przez użytkownika
+    printf("Podaj wyrazenie do sprawdzenia: ");
+    char wyrazenie[300];
+    scanf("%s", wyrazenie);
     
+    /* wykonanie sprawdzenia podanego przez uzytkownika wyrazenia pod kątem zgodności z wyrażeniem regularnym */
+    zwrotCzyRegularneWyrazenieJestOk = regexec(&regularneWyrazenie, wyrazenie, 0, NULL, 0);
+    if (!zwrotCzyRegularneWyrazenieJestOk) {
+        printf("%s wyrażenie jest zgodne z gramatyką\n",wyrazenie);
+    }
+    else if (zwrotCzyRegularneWyrazenieJestOk == REG_NOMATCH) {
+        printf("%s wyrazenie nie jest zgodne z gramatyka\n",wyrazenie);
+    }
+    else {
+        //jezeli wystapil blad podczas sprawdzania to program zakonczy działanie ze zwrotem -1
+        regerror(zwrotCzyRegularneWyrazenieJestOk, &regularneWyrazenie, wyrazenie, sizeof(wyrazenie));
+        printf("Blad podczas sprawdzania zgodnosci z wyrazeniem regularnym\n");
+        return -1;
+    }
+
+    /* Zwalanianie pamieci zadeklarowanej na potrzeby wyrazenia regularnego*/
+    regfree(&regularneWyrazenie);
+    return 0;
 }
