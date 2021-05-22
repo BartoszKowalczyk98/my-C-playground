@@ -6,11 +6,12 @@
 int main(int argc, char const *argv[])
 {
     char tablica_przejsc[4][3][10] = {
-        {{"-,1,L"},{"-,1,L"},{"-,4,-"}},//q0
-        {{"-,4,-"},{"-,4,-"},{"1,3,-"}},//q1
-        {{"-,-,-"},{"-,-,-"},{"1,3,-"}},//q2
-        {{"-,-,-"},{"-,-,-"},{"-,-,-"}} //q4 stan bledu
+        {{"-,1,L"},{"-,1,L"},{"-,3,-"}},//q0 stan
+        {{"-,3,-"},{"-,3,-"},{"1,2,-"}},//q1
+        {{"-,-,-"},{"-,-,-"},{"-,-,-"}},//q2 stan akceptujacy
+        {{"-,-,-"},{"-,-,-"},{"-,-,-"}} //q3 stan bledu
     };
+    //za znak pusty theta odpowiada litera "t" 
     printf("podaj liczbe binarna jednocyfrowa (\"1\" lub \"0\")do zwiekszenia o 2: ");
     char liczba[2];
     scanf("%s", &liczba);
@@ -30,7 +31,7 @@ int main(int argc, char const *argv[])
     {
 
         printf("aktualny stan  %d  ||| aktualnie analizowana litera %c |||",aktualny_stan,tasma[indeks_na_ktory_wskazuje_glowica]);
-        if(aktualny_stan==4)
+        if(aktualny_stan==3)
         {
             printf("\nautomat znalazl sie w stanie q4 czyli w stanie bledu!\n");
             return -1;
@@ -114,12 +115,12 @@ int main(int argc, char const *argv[])
                 printf("blad wprowadzonej liczby");
                 return -1;
             }
-            printf("automat napotkal nierozpoznany znak ");
+            printf(" automat napotkal nierozpoznany znak ");
             return -1;                        
         }
         printf("\n");
         
-    }while(aktualny_stan !=3 );
+    }while(aktualny_stan !=2 );
     printf("maszyna zakonczyla dzialanie w stanie %d a ciag wyjsciowy to:\n%s\n",aktualny_stan,tasma);
 
 }
