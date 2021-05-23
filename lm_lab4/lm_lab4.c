@@ -11,7 +11,7 @@ int main(int argc, char const *argv[])
     /* kompilacja wyrazenia regularnego w celu sprawdzenia czy jest ono zgodne ze standardami */
     zwrotCzyRegularneWyrazenieJestOk = 
       regcomp(&regularneWyrazenie, 
-      "^(([0]?)|([1-9]+[0-9]*))([-/+///*/^]((0?)|([1-9]+[0-9]*)))*(;(([0]?)|([1-9]+[0-9]*))([//+///*/^]((0?)|([1-9]+[0-9]*)))*)*$"
+      "^(([0]?)|([1-9]+[0-9]*))([-/+///*/^]((0?)|([1-9]+[0-9]*)))*(;(([0]?)|([1-9]+[0-9]*))([-/+///*/^]((0?)|([1-9]+[0-9]*)))*)*$"
       , REG_EXTENDED);
 
     // jeżeli nie udalo sie skompilowac wyrazenia regularnego to zostanie wyrzucony błąd
