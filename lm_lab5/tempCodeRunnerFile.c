@@ -4,24 +4,25 @@
 
 
 // tablice first z gramatyki
-char FirstS[]="0123456789(";
-char FirstZ[]="0123456789(";
-char FirstW[]="0123456789(";
-char FirstWp[]="*:+-^";
-char FirstP[]="0123456789(";
-char FirstR[]="0123456789";
-char FirstRp[]=".";
-char FirstL[]="0123456789";
-char FirstLp[]="0123456789";
-char FirstC[]="0123456789";
-char FirstO[]="*:+-^";
+char FirstS[]={'0','1','2','3','4','5','6','7','8','9','('};
+char FirstZ[]={'0','1','2','3','4','5','6','7','8','9','('};
+char FirstW[]={'0','1','2','3','4','5','6','7','8','9','('};
+char FirstWp[]={'*' , ':' , '+' , '-' , '^'};
+char FirstP[]={'0','1','2','3','4','5','6','7','8','9','('};
+char FirstR[]={'0','1','2','3','4','5','6','7','8','9'};
+char FirstRp[]={'.'};
+char FirstL[]={'0','1','2','3','4','5','6','7','8','9'};
+char FirstLp[]={'0','1','2','3','4','5','6','7','8','9'};
+char FirstC[]={'0','1','2','3','4','5','6','7','8','9'};
+char FirstO[]={'*',':','+','-','^'};
+
 
 
 // symbol wczytany do sprawdzenia
-char nextsymbol;
+char next;
 
 // indeks wskazujacy aktualna pozycje w wyrazeniu
-int indexOfWyrazenie = -1;
+int i = -1;
 
 // tablica char przechowujaca wyrazenie wpisane przez uzytkownika
 char wyrazenie[300];
@@ -29,8 +30,8 @@ char wyrazenie[300];
 
 
 // wczytanie następnego symbolu z wyrażenia
-char readNextSymbol();
-void checkChar(char c);
+char readNext();
+void read(char c);
 void readS();
 void readZ();
 void readW();
@@ -51,30 +52,31 @@ int main(int argc, char const *argv[])
     scanf("%s", wyrazenie);
 
     printf("Podane wyrazenie: %s\n\n", wyrazenie);
-	nextsymbol = readNextSymbol();
+	next = readNext();
 	readS();
-	if (nextsymbol != '\0')
+	if (next != '\0')
     {
         printf("Podane wyrazenie nie jest zgodne z gramatyka!");
 	    return -1;
     }
 	else
 		printf("Wyraznie jest zgodne z gramatyka\n");
-	return 0;
+	return 1;
 }
 
 
-char readNextSymbol()
+char readNext()
 {
-    return wyrazenie[++indexOfWyrazenie];
+    return wyrazenie[++i];
 }
 
-void checkChar(char c)
+void read(char c)
 {
-	if (nextsymbol == c)
-		nextsymbol = readNextSymbol();
+	if (next == c)
+		next = readNext();
 	else// wyrzucenie błędu i zakończenie programu
     {
+        printf("doopsko");
         printf("Podane wyrazenie nie jest zgodne z gramatyka!");
 	    exit(-1);
     }
@@ -84,10 +86,10 @@ void checkChar(char c)
 // S::= W ; Z
 void readS(){
     
-    if (strchr(FirstW, nextsymbol) != NULL && nextsymbol!='\0')
+    if (strchr(FirstW, next) != NULL && next!='\0')
     {
         readW();
-        checkChar(';');
+        read(';');
         readZ();
     }
     else// wyrzucenie błędu i zakończenie programu
@@ -100,10 +102,10 @@ void readS(){
 // Z::= W ; Z | eps
 void readZ()
 {
-	if (strchr(FirstW, nextsymbol) != NULL && nextsymbol != '\0')
+	if (strchr(FirstW, next) != NULL && next != '\0')
 	{
 		readW();
-		checkChar(';');
+		read(';');
 		readZ();
 	}
 	
@@ -111,7 +113,7 @@ void readZ()
 // W::= P W’
 void readW()
 {
-	if (strchr(FirstP, nextsymbol) != NULL && nextsymbol != '\0')
+	if (strchr(FirstP, next) != NULL && next != '\0')
 	{
 		readP();
 		readWp();
@@ -125,7 +127,7 @@ void readW()
 // W’::= O W | eps
 void readWp()
 {
-	if (strchr(FirstO, nextsymbol) !=NULL && nextsymbol != '\0')
+	if (strchr(FirstO, next) !=NULL && next != '\0')
 	{
 		readO();
 		readW();
@@ -135,21 +137,21 @@ void readWp()
 // P::= R | ( W )
 void readP()
 {
-	if (strchr(FirstR, nextsymbol) !=NULL && nextsymbol != '\0')
+	if (strchr(FirstR, next) !=NULL && next != '\0')
 	{
 		readR();
 	}
-	else if (nextsymbol == '(')
+	else if (next == '(')
 	{
-		checkChar('(');
+		read('(');
 		readW();
-		checkChar(')');
+		read(')');
 	}
 }
 // R::= L R’
 void readR()
 {
-	if (strchr(FirstL, nextsymbol) !=NULL && nextsymbol != '\0')
+	if (strchr(FirstL, next) !=NULL && next != '\0')
 	{
 		readL();
 		readRp();
@@ -163,9 +165,9 @@ void readR()
 // R’::= . L | eps
 void readRp()
 {
-	if (nextsymbol == '.')
+	if (next == '.')
 	{
-		checkChar('.');
+		read('.');
 		readL();
 	}
 
@@ -173,7 +175,7 @@ void readRp()
 // L::= C L’
 void readL()
 {
-	if (strchr(FirstC, nextsymbol) != NULL && nextsymbol !='\0')
+	if (strchr(FirstC, next) != NULL && next !='\0')
 	{
 		readC();
 		readLp();
@@ -187,7 +189,7 @@ void readL()
 // L’::= L | eps
 void readLp()
 {
-    if (strchr(FirstL, nextsymbol) != NULL && nextsymbol !='\0')
+    if (strchr(FirstL, next) != NULL && next !='\0')
 	{
 		readL();
 	}
@@ -196,44 +198,44 @@ void readLp()
 // C::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 void readC()
 {
-	if(nextsymbol == '0'){
-        checkChar('0');
+	if(next == '0'){
+        read('0');
     }
-    else if(nextsymbol == '1')
+    else if(next == '1')
     {
-        checkChar('1');
+        read('1');
     }
-    else if(nextsymbol == '2')
+    else if(next == '2')
     {
-        checkChar('2');
+        read('2');
     }
-    else if(nextsymbol == '3')
+    else if(next == '3')
     {
-        checkChar('3');
+        read('3');
     }
-    else if(nextsymbol == '4')
+    else if(next == '4')
     {
-        checkChar('4');
+        read('4');
     }
-    else if(nextsymbol == '5')
+    else if(next == '5')
     {
-        checkChar('5');
+        read('5');
     }
-    else if(nextsymbol == '6')
+    else if(next == '6')
     {
-        checkChar('6');
+        read('6');
     }
-    else if(nextsymbol == '7')
+    else if(next == '7')
     {
-        checkChar('7');
+        read('7');
     }
-    else if(nextsymbol == '8')
+    else if(next == '8')
     {
-        checkChar('8');
+        read('8');
     }
-    else if(nextsymbol == '9')
+    else if(next == '9')
     {
-        checkChar('9');
+        read('9');
     }
     else// wyrzucenie błędu i zakończenie programu
     {
@@ -244,24 +246,24 @@ void readC()
 // O::= * | : | + | - | ^
 void readO()
 {
-    if(nextsymbol == '+'){
-        checkChar('+');
+    if(next == '+'){
+        read('+');
     }
-    else if(nextsymbol == ':')
+    else if(next == ':')
     {
-        checkChar(':');
+        read(':');
     }
-    else if(nextsymbol == '*')
+    else if(next == '*')
     {
-        checkChar('*');
+        read('*');
     }
-    else if(nextsymbol == '-')
+    else if(next == '-')
     {
-        checkChar('-');
+        read('-');
     }
-    else if(nextsymbol == '^')
+    else if(next == '^')
     {
-        checkChar('^');
+        read('^');
     }
     else// wyrzucenie błędu i zakończenie programu
     {
